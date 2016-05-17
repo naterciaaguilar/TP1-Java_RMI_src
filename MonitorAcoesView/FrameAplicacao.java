@@ -8,7 +8,8 @@ import javax.swing.JFrame;
  * @author User
  */
 public class FrameAplicacao extends JFrame {
-    public FrameAplicacao (String titulo, int largura, int altura) {
+
+	public FrameAplicacao (String titulo, int largura, int altura) {
         super();
         this.setSize(largura, altura);
         this.setTitle(titulo);

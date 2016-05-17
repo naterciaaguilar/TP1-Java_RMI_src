@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,6 +17,7 @@ import javax.swing.JTextArea;
 import MonitorAcoesController.ClienteInvestidorController;
 
 public class ClienteInvestidorMonitoramento extends JInternalFrame {
+
 	private JLabel lblNomeAcaoCabecalho;
 	private JLabel lblNomeAcao;
 	private JLabel lblHistoricoPrecos;

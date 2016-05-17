@@ -15,6 +15,7 @@ import MonitorAcoesController.ClienteAdministradorController;
 
 
 public class ClienteAdministradorEdicao extends JInternalFrame {
+
 	private JLabel lblNomeAcao;
 	private JLabel lblPrecoAcao;
 	private JTextField nomeAcao;
@@ -97,8 +98,16 @@ public class ClienteAdministradorEdicao extends JInternalFrame {
 		return this.nomeAcao.getText();
 	}
 	
+	public void setNomeAcaoStr(String nomeAcao) {
+		this.nomeAcao.setText(nomeAcao);
+	}
+	
 	public String getPrecoAcaoStr() {
 		return this.precoAcao.getText();
+	}
+	
+	public void setPrecoAcaoStr() {
+		this.precoAcao.setText("");
 	}
 	
 	public JButton getSalvar() {

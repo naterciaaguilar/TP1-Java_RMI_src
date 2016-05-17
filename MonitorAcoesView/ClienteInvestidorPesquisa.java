@@ -20,10 +20,12 @@ import javax.swing.JTextArea;
 import MonitorAcoesController.ClienteInvestidorController;
 
 public class ClienteInvestidorPesquisa extends JInternalFrame {
+
 	private JLabel lblAcoesDisponiveis;
 	private JLabel lblAcoesMonitoradas;
 	private JComboBox comboAcoesDisponiveis;
 	private JButton pesquisar;
+	private JButton atualizar;
 	private JTextArea acoesMonitoradas;
 	
 	public ClienteInvestidorPesquisa(int largura, int altura, ClienteInvestidorController controlClienteInvestidor) {
@@ -42,10 +44,12 @@ public class ClienteInvestidorPesquisa extends JInternalFrame {
         this.lblAcoesDisponiveis = new JLabel("Ações Disponíveis: ");
         this.comboAcoesDisponiveis = new JComboBox();
         this.pesquisar = new JButton("Pesquisar");
+        this.atualizar = new JButton("Atualizar");
         
         panelPesquisa.add(this.lblAcoesDisponiveis);
         panelPesquisa.add(this.comboAcoesDisponiveis);
         panelPesquisa.add(this.pesquisar);
+        panelPesquisa.add(this.atualizar);
         
         contentPane.add(panelPesquisa, "North");
         
@@ -54,7 +58,7 @@ public class ClienteInvestidorPesquisa extends JInternalFrame {
         
         JPanel panelLblMonitor = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
               
-        this.lblAcoesMonitoradas = new JLabel("Ações Monitoradas: ");
+        this.lblAcoesMonitoradas = new JLabel("Alertas de Ações Monitoradas: ");
         
         panelLblMonitor.add(this.lblAcoesMonitoradas);
                 
@@ -75,10 +79,15 @@ public class ClienteInvestidorPesquisa extends JInternalFrame {
         
         // tratamento de eventos
         this.pesquisar.addActionListener(controlClienteInvestidor);
+        this.atualizar.addActionListener(controlClienteInvestidor);
 	}	
-	
+
 	public JButton getPesquisar() {
 		return this.pesquisar;
+	}
+	
+	public JButton getAtualizar() {
+		return this.atualizar;
 	}
 	
 	public String getAcaoSelecionada() {
@@ -89,13 +98,11 @@ public class ClienteInvestidorPesquisa extends JInternalFrame {
 		this.comboAcoesDisponiveis.setModel(new DefaultComboBoxModel(acoesServidor.toArray()));
 	}
 	
-	public void setAcoesMonitoradas(ArrayList<String> acoesMonitoradas) {
-		String texto = "";
-		
-		for (String acaoMonit : acoesMonitoradas) {
-			texto += acaoMonit + "\n";
-		}
-		
-		this.acoesMonitoradas.setText(texto);
+	public void setTextoAcoesMonitoradas(String acoesMonitoradas) {
+		this.acoesMonitoradas.setText(acoesMonitoradas);
+	}
+	
+	public String getTextoAcoesMonitoradas() {
+		return this.acoesMonitoradas.getText();
 	}
 }

@@ -8,7 +8,7 @@ import MonitorAcoesModel.ServidorAcoes;
 public class MainServidorAcoesController {
 	public static void main(String[] args) {
 		//int porta = Integer.parseInt(args[0]);
-		int porta = 9998;
+		int porta = 9995;
 		try {
 			IServidorAcoes servidor = new ServidorAcoes();
 			

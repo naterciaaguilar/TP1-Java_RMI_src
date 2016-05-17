@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 
 import javax.swing.JOptionPane;
 
-import MonitorAcoesModel.Acao;
 import MonitorAcoesModel.IServidorAcoes;
 import MonitorAcoesView.ClienteAdministradorView;
 
@@ -30,17 +29,23 @@ public class ClienteAdministradorController implements ActionListener {
 	public void criarAlterarAcao(String nomeAcao, double preco, String operacao) throws RemoteException {
 		// procedimentos para alterar ação
 		// operacao = NOVA ou EDITAR
+		String msg;
+		
 		if (operacao.equals("NOVA")) {
 			this.acaoCorrente = this.servAcoes.encontraAcao(nomeAcao);
+			msg = "Ação criada com sucesso!";
 			
 			if(this.acaoCorrente != null) {
 				JOptionPane.showMessageDialog(null, "Ação existente. Modo alterado para edição.");
 				this.viewClienteAdministrador.getTelaEdicao().setModo("EDITAR");
+				msg = "Ação alterada com sucesso!";
 			}
+		} else {
+			msg = "Ação alterada com sucesso!";
 		}
 	
 		this.servAcoes.setPrecoAcao(nomeAcao, preco);
-		JOptionPane.showMessageDialog(null, "Ação alterada com sucesso!");
+		JOptionPane.showMessageDialog(null, msg);
 		this.alterarVisibilidadeTelas(true, false);
 	}
 	
@@ -57,8 +62,14 @@ public class ClienteAdministradorController implements ActionListener {
 			this.viewClienteAdministrador.getTelaPesquisa().getEditarAcao().setEnabled(true);
 		} else {
 			JOptionPane.showMessageDialog(null, "Não existe ação com o nome informado!");
+			this.viewClienteAdministrador.getTelaPesquisa().getPesquisaAcoes().setText("");
 			this.viewClienteAdministrador.getTelaPesquisa().getEditarAcao().setEnabled(false);
 		}
+	}
+	
+	public void zerarCamposPesquisa() {
+		this.viewClienteAdministrador.getTelaPesquisa().getPesquisaAcoes().setText("");
+		this.viewClienteAdministrador.getTelaPesquisa().setNomeAcao();
 	}
 	
 	/**
@@ -75,17 +86,23 @@ public class ClienteAdministradorController implements ActionListener {
     		// procedimentos para realizar a pesquisa de uma ação
     		this.pesquisarAcao(this.viewClienteAdministrador.getTelaPesquisa().getNomeAcaoStr());
     	} else if (obj == this.viewClienteAdministrador.getTelaPesquisa().getEditarAcao()) {
+    		this.viewClienteAdministrador.getTelaEdicao().setPrecoAcaoStr();
+    		this.viewClienteAdministrador.getTelaEdicao().setNomeAcaoStr(this.acaoCorrente);
     		this.viewClienteAdministrador.getTelaEdicao().setModo("EDITAR");
     		this.alterarVisibilidadeTelas(false, true);
     	} else if (obj == this.viewClienteAdministrador.getTelaPesquisa().getNovaAcao()) {
+    		this.viewClienteAdministrador.getTelaEdicao().setPrecoAcaoStr();
+			this.viewClienteAdministrador.getTelaEdicao().setNomeAcaoStr("");
     		this.viewClienteAdministrador.getTelaEdicao().setModo("NOVA");
     		this.alterarVisibilidadeTelas(false, true);
     	}
     	
     	// tratamento dos eventos da tela de Edição
     	if (obj == this.viewClienteAdministrador.getTelaEdicao().getVoltar()) {
+    		this.zerarCamposPesquisa();
     		this.alterarVisibilidadeTelas(true, false);
     	} else if (obj == this.viewClienteAdministrador.getTelaEdicao().getSalvar()) {
+    		this.zerarCamposPesquisa();
     		try {
 				this.criarAlterarAcao(this.viewClienteAdministrador.getTelaEdicao().getNomeAcaoStr(), 
 									  Double.parseDouble(this.viewClienteAdministrador.getTelaEdicao().getPrecoAcaoStr()), 

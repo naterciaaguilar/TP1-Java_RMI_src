@@ -19,6 +19,7 @@ import MonitorAcoesController.ClienteAdministradorController;
 
 
 public class ClienteAdministradorPesquisa extends JInternalFrame {
+
 	private JLabel lblNomeAcao;
 	private JTextField nomeAcao;
 	private JButton pesquisar;
@@ -83,6 +84,10 @@ public class ClienteAdministradorPesquisa extends JInternalFrame {
 	
 	public String getNomeAcaoStr() {
 		return this.nomeAcao.getText();
+	}
+	
+	public void setNomeAcao() {
+		this.nomeAcao.setText("");
 	}
 	
 	public JButton getPesquisar() {

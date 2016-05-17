@@ -3,7 +3,6 @@ package MonitorAcoesController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -14,7 +13,6 @@ import MonitorAcoesView.ClienteInvestidorView;
 public class ClienteInvestidorController implements ActionListener {
 	private ClienteInvestidorView viewClienteInvestidor;
 	private IServidorAcoes servidorAcoes;
-	private ArrayList<String> listaAcoes;
 	private String acaoCorrente;
 	private String historicoPrecosAcaoCorrente;
 	
@@ -25,13 +23,7 @@ public class ClienteInvestidorController implements ActionListener {
 		try {
 			// carregar lista de ações disponíveis no servidor
 			this.servidorAcoes = objRemoto;
-			//this.listaAcoes = new ArrayList<String>();
-			//listaAcoes.add("acao");
-			//listaAcoes.add("nova");
-			this.listaAcoes = this.servidorAcoes.getAc();
-			//if (this.listaAcoes.size() > 0) {
-				this.viewClienteInvestidor.getTelaPesquisa().setComboAcoesDisponiveis(listaAcoes);
-			//}
+			this.atualizarListaAcoes();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -43,7 +35,15 @@ public class ClienteInvestidorController implements ActionListener {
 		this.viewClienteInvestidor.getTelaMonitoramento().setVisible(visibilidadeTelaMonitoramento);
 		
 		if (visibilidadeTelaPesquisa) {
-			this.viewClienteInvestidor.getTelaPesquisa().setComboAcoesDisponiveis(servidorAcoes.getAc());
+			this.atualizarListaAcoes();
+		}
+	}
+	
+	public void atualizarListaAcoes() {
+		try {
+			this.viewClienteInvestidor.getTelaPesquisa().setComboAcoesDisponiveis(this.servidorAcoes.getListaAcoes());
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class ClienteInvestidorController implements ActionListener {
 	
 	public void monitorarAcao() {
 		try {
-			new ClienteInvestidor(this.acaoCorrente, this.servidorAcoes);
+			new ClienteInvestidor(this.acaoCorrente, this.servidorAcoes, this);
 			JOptionPane.showMessageDialog(null, "A ação está sendo monitorada!");
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -85,6 +85,8 @@ public class ClienteInvestidorController implements ActionListener {
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 			}
+    	} else if (obj == this.viewClienteInvestidor.getTelaPesquisa().getAtualizar()) {
+    		this.atualizarListaAcoes();
     	}
     	
     	// tratamento dos eventos da tela de Monitoramento
@@ -98,5 +100,9 @@ public class ClienteInvestidorController implements ActionListener {
     		// procedimentos para o monitoramento de ações
     		this.monitorarAcao();
     	}
+    }
+    
+    public ClienteInvestidorView getViewClienteInvestidor() {
+    	return this.viewClienteInvestidor;
     }
 }

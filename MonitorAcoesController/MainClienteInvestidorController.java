@@ -7,7 +7,7 @@ import MonitorAcoesModel.IServidorAcoes;
 public class MainClienteInvestidorController {
 	public static void main (String[] args){
 		//int porta = Integer.parseInt(args[0]);
-		int porta = 9998;
+		int porta = 9995;
 		
 		try {
 			IServidorAcoes obj = (IServidorAcoes)Naming.lookup("rmi://localhost:" + porta + "/servidordeacoes");

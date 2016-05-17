@@ -15,17 +15,8 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 		this.interesse = new ArrayList<InteresseAcao>();
 	}
 	
-	public ArrayList<String> getAcoesServidor() throws RemoteException {
-		ArrayList<String> listaAcoes = new ArrayList<String>();
-		
-		for (Acao acao : this.acoesServidor) {
-			listaAcoes.add(acao.getNomeAcao());
-		}
-		
-		return listaAcoes;
-	}
-	
 	public void setPrecoAcao(String nomeAcao, double novoPreco) throws RemoteException {
+		// se ação existir, altera preço
 		for (Acao acaoChange : this.acoesServidor) {
 			if (acaoChange.getNomeAcao().equals(nomeAcao)) {
 				acaoChange.getPrecosAcao().add(new HistoricoPrecos(novoPreco));
@@ -34,58 +25,37 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 			}
 		}
 		
-		// se ação não existir
+		// se ação não existir, cria uma nova ação
 		Acao novaAcao = new Acao(nomeAcao, novoPreco);
 		this.acoesServidor.add(novaAcao);
 		InteresseAcao novoInteresse = new InteresseAcao(novaAcao);
 		this.interesse.add(novoInteresse);
-	
-		/*int i = 0;
-		boolean achou = false;
-		for (Acao acaoInteracao : this.acoesServidor){
-			if (acaoInteracao.getNomeAcao().equals(nomeAcao)){
-				achou = true;
-				i = this.acoesServidor.indexOf(acaoInteracao);
-			}
-		}
-		if (!achou){
-			Acao novaAcao = new Acao(nomeAcao, novoPreco);
-			this.acoesServidor.add(novaAcao);
-			InteresseAcao novoInteresse = new InteresseAcao(novaAcao);
-			this.interesse.add(novoInteresse);
-		} else {
-			HistoricoPrecos preco = new HistoricoPrecos(novoPreco);
-			this.acoesServidor.get(i).getPrecosAcao().add(preco);
-			comunicaAlteracao(this.acoesServidor.get(i).getNomeAcao());
-		}*/	
 	}
 	
-	public void registraAcaoCliente(IClienteInvestidor registraCliente)throws RemoteException {
+	public void registraAcaoCliente(IClienteInvestidor registraCliente) throws RemoteException {
+		// registra cliente com interesse de ser notificado numa lista
 		String nomeAcao = registraCliente.getNomeAcao();
-		int i = 0;
-		for(InteresseAcao comunica : this.interesse){
-			if (comunica.getAcao().getNomeAcao().equals(nomeAcao)){
-				i = this.interesse.indexOf(comunica);
+
+		for (InteresseAcao comunica : this.interesse){
+			if (comunica.getAcao().getNomeAcao().equals(nomeAcao)) {
+				comunica.getClientesInteresse().add(registraCliente);
 			}
 		}
-		this.interesse.get(i).getClientesInteresse().add(registraCliente);	
 	}
 
 	public void comunicaAlteracao(String acao) throws RemoteException {
-		int i = 0;
-		int j = 0;
-		int k = 0;
-		for(InteresseAcao comunica : this.interesse){
+		// comunica alteração do preço a uma lista de clientes que escolheram ser notificados
+		String mensagem;
+		
+		for (InteresseAcao comunica : this.interesse){
 			if (comunica.getAcao().getNomeAcao().equals(acao)){
-				i = this.interesse.indexOf(comunica);
+				mensagem = "A ação " + comunica.getAcao().getNomeAcao() 
+						 + " foi alterada para R$ " + comunica.getAcao().getUltimoPreco().getPrecoAcao()
+						 + " na data " + comunica.getAcao().getUltimoPreco().getDataAlt().toString() + "\n";
+				for (IClienteInvestidor cliInvest : comunica.getClientesInteresse()) {
+					cliInvest.notificaAlteracao(mensagem);
+				}
 			}
-		}
-		while (j<this.interesse.get(i).getClientesInteresse().size()){
-			k = this.interesse.get(i).getAcao().getPrecosAcao().size()-1;
-			String mensagem = this.interesse.get(i).getAcao().getPrecosAcao().get(k).getDataAlt().toString()+
-					" - "+this.interesse.get(i).getAcao().getNomeAcao()+
-					" - R$ "+this.interesse.get(i).getAcao().getPrecosAcao().get(k).getPrecoAcao();
-			this.interesse.get(i).getClientesInteresse().get(j++).notificaAlteracao(mensagem);
 		}
 	}
 
@@ -99,7 +69,7 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 		return null;
 	}
 	
-	public ArrayList<String> getAc() {
+	public ArrayList<String> getListaAcoes() {
 		ArrayList<String> lista = new ArrayList<String>();
 		
 		for (Acao acao : this.acoesServidor) {

@@ -34,4 +34,8 @@ public class Acao {
 		
 		return historico;
 	}
+	
+	public HistoricoPrecos getUltimoPreco() {
+		return precosAcao.get(precosAcao.size() - 1);
+	}
 }
