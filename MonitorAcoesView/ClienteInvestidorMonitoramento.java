@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import MonitorAcoesController.ClienteInvestidorController;
-import MonitorAcoesModel.HistoricoPrecos;
 
 public class ClienteInvestidorMonitoramento extends JInternalFrame {
 	private JLabel lblNomeAcaoCabecalho;
@@ -99,7 +98,7 @@ public class ClienteInvestidorMonitoramento extends JInternalFrame {
 		this.lblNomeAcao.setText(nome);
 	}
 	
-	public void setHistoricoPrecos(ArrayList<HistoricoPrecos> historico) {
-		
+	public void setHistoricoPrecos(String historico) {
+		this.historicoPrecos.setText(historico);
 	}
 }

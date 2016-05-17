@@ -15,17 +15,32 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 		this.interesse = new ArrayList<InteresseAcao>();
 	}
 	
-	public ArrayList<Acao> getAcoesServidor() throws RemoteException {
-		return this.acoesServidor;
+	public ArrayList<String> getAcoesServidor() throws RemoteException {
+		ArrayList<String> listaAcoes = new ArrayList<String>();
+		
+		for (Acao acao : this.acoesServidor) {
+			listaAcoes.add(acao.getNomeAcao());
+		}
+		
+		return listaAcoes;
 	}
-	//acho q nao precisa dessa classe
-	/*public String getNomeAcao(Acao acao) throws RemoteException {
-		return acao.getNomeAcao();
-	}*/
 	
 	public void setPrecoAcao(String nomeAcao, double novoPreco) throws RemoteException {
-		//String nomeAcao = acao.getNomeAcao();
-		int i = 0;
+		for (Acao acaoChange : this.acoesServidor) {
+			if (acaoChange.getNomeAcao().equals(nomeAcao)) {
+				acaoChange.getPrecosAcao().add(new HistoricoPrecos(novoPreco));
+				comunicaAlteracao(acaoChange.getNomeAcao());
+				return;
+			}
+		}
+		
+		// se ação não existir
+		Acao novaAcao = new Acao(nomeAcao, novoPreco);
+		this.acoesServidor.add(novaAcao);
+		InteresseAcao novoInteresse = new InteresseAcao(novaAcao);
+		this.interesse.add(novoInteresse);
+	
+		/*int i = 0;
 		boolean achou = false;
 		for (Acao acaoInteracao : this.acoesServidor){
 			if (acaoInteracao.getNomeAcao().equals(nomeAcao)){
@@ -38,11 +53,11 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 			this.acoesServidor.add(novaAcao);
 			InteresseAcao novoInteresse = new InteresseAcao(novaAcao);
 			this.interesse.add(novoInteresse);
-		}else{
+		} else {
 			HistoricoPrecos preco = new HistoricoPrecos(novoPreco);
 			this.acoesServidor.get(i).getPrecosAcao().add(preco);
 			comunicaAlteracao(this.acoesServidor.get(i).getNomeAcao());
-		}	
+		}*/	
 	}
 	
 	public void registraAcaoCliente(IClienteInvestidor registraCliente)throws RemoteException {
@@ -74,4 +89,23 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 		}
 	}
 
+	public String encontraAcao(String nomeAcao) {
+		for(Acao acao : this.acoesServidor) {
+			if(acao.getNomeAcao().equals(nomeAcao)) {
+				return acao.getListaHistorico();
+			}
+		}
+		
+		return null;
+	}
+	
+	public ArrayList<String> getAc() {
+		ArrayList<String> lista = new ArrayList<String>();
+		
+		for (Acao acao : this.acoesServidor) {
+			lista.add(acao.getNomeAcao());
+		}
+		
+		return lista;
+	}
 }

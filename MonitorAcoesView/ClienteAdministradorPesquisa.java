@@ -66,6 +66,8 @@ public class ClienteAdministradorPesquisa extends JInternalFrame {
         JPanel panelRodape = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
         this.editarAcao = new JButton("Editar Preço");
+        this.editarAcao.setEnabled(false);
+        
         this.novaAcao = new JButton("Nova Ação");
         
         panelRodape.add(editarAcao);

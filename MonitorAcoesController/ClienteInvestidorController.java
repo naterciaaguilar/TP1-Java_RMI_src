@@ -5,8 +5,9 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import MonitorAcoesModel.Acao;
-import MonitorAcoesModel.IClienteInvestidor;
+import javax.swing.JOptionPane;
+
+import MonitorAcoesModel.ClienteInvestidor;
 import MonitorAcoesModel.IServidorAcoes;
 import MonitorAcoesView.ClienteInvestidorView;
 
@@ -14,6 +15,9 @@ public class ClienteInvestidorController implements ActionListener {
 	private ClienteInvestidorView viewClienteInvestidor;
 	private IServidorAcoes servidorAcoes;
 	private ArrayList<String> listaAcoes;
+	private String acaoCorrente;
+	private String historicoPrecosAcaoCorrente;
+	
 	
 	public void inicializaClienteInvestidor(IServidorAcoes objRemoto) throws RemoteException {
 		this.viewClienteInvestidor = new ClienteInvestidorView(this);
@@ -21,7 +25,13 @@ public class ClienteInvestidorController implements ActionListener {
 		try {
 			// carregar lista de ações disponíveis no servidor
 			this.servidorAcoes = objRemoto;
-			this.atualizarListaAcoes(this.servidorAcoes.getAcoesServidor());
+			//this.listaAcoes = new ArrayList<String>();
+			//listaAcoes.add("acao");
+			//listaAcoes.add("nova");
+			this.listaAcoes = this.servidorAcoes.getAc();
+			//if (this.listaAcoes.size() > 0) {
+				this.viewClienteInvestidor.getTelaPesquisa().setComboAcoesDisponiveis(listaAcoes);
+			//}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -33,19 +43,28 @@ public class ClienteInvestidorController implements ActionListener {
 		this.viewClienteInvestidor.getTelaMonitoramento().setVisible(visibilidadeTelaMonitoramento);
 		
 		if (visibilidadeTelaPesquisa) {
-			this.atualizarListaAcoes(this.servidorAcoes.getAcoesServidor());
+			this.viewClienteInvestidor.getTelaPesquisa().setComboAcoesDisponiveis(servidorAcoes.getAc());
 		}
 	}
 	
-	public void atualizarListaAcoes(ArrayList<Acao> acoesServidor) {
-		this.listaAcoes = new ArrayList<String>();
-		
-		for(Acao acao : acoesServidor) {
-			listaAcoes.add(acao.getNomeAcao());
+	public void pesquisarAcao(String nomeAcao) {
+		try {
+			this.acaoCorrente = nomeAcao;
+			this.historicoPrecosAcaoCorrente = this.servidorAcoes.encontraAcao(this.acaoCorrente);
+			this.viewClienteInvestidor.getTelaMonitoramento().setLblNomeAcao(this.acaoCorrente);
+			this.viewClienteInvestidor.getTelaMonitoramento().setHistoricoPrecos(this.historicoPrecosAcaoCorrente);
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
-		
-		// atualiza lista no combobox
-		this.viewClienteInvestidor.getTelaPesquisa().setComboAcoesDisponiveis(listaAcoes);
+	}
+	
+	public void monitorarAcao() {
+		try {
+			new ClienteInvestidor(this.acaoCorrente, this.servidorAcoes);
+			JOptionPane.showMessageDialog(null, "A ação está sendo monitorada!");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -60,7 +79,7 @@ public class ClienteInvestidorController implements ActionListener {
     	// tratamento dos eventos da tela de Pesquisa
     	if (obj == this.viewClienteInvestidor.getTelaPesquisa().getPesquisar()) {
     		// procedimentos para realizar a pesquisa de uma ação
-    		// this.viewClienteInvestidor.getTelaPesquisa().getAcaoSelecionada()
+    		this.pesquisarAcao(this.viewClienteInvestidor.getTelaPesquisa().getAcaoSelecionada());
     		try {
 				this.alterarVisibilidadeTelas(false, true);
 			} catch (RemoteException e1) {
@@ -77,6 +96,7 @@ public class ClienteInvestidorController implements ActionListener {
 			}
     	} else if (obj == this.viewClienteInvestidor.getTelaMonitoramento().getMonitorar()) {
     		// procedimentos para o monitoramento de ações
+    		this.monitorarAcao();
     	}
     }
 }

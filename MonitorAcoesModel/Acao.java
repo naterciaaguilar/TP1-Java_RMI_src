@@ -25,5 +25,13 @@ public class Acao {
 		return precosAcao;
 	}
 	
-	
+	public String getListaHistorico() {
+		String historico = "";
+		
+		for (HistoricoPrecos hist : this.precosAcao) {
+			historico += this.nomeAcao + " - " + hist.getDataAlt().toString() + " - R$ " + hist.getPrecoAcao() + "\n";
+		}
+		
+		return historico;
+	}
 }

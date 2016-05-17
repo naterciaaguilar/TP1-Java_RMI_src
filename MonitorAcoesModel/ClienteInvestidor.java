@@ -3,31 +3,30 @@ package MonitorAcoesModel;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.swing.JOptionPane;
+
 public class ClienteInvestidor extends UnicastRemoteObject implements IClienteInvestidor {
 	
 	private static final long serialVersionUID = 1L;
-	private Acao acao;
+	private String nomeAcao;
 		
 	public ClienteInvestidor(String acao, IServidorAcoes servidor) throws RemoteException {
-		this.acao = new Acao(acao,0);
-		this.acao.setNomeAcao(acao);
+		this.nomeAcao = acao;
 		servidor.registraAcaoCliente(this);
 	}
 	
-	public Acao getAcao() throws RemoteException {
-		return this.acao;
-	}
 	
 	public String getNomeAcao() throws RemoteException {
-		return this.acao.getNomeAcao();
+		return this.nomeAcao;
 	}
 	
 	public void notificaAlteracao(String message) throws RemoteException {
-		System.out.println(message);
+		//System.out.println(message);
+		JOptionPane.showMessageDialog(null, message);
 	}
 	
-	public void monitoraAcao(Acao acao) throws RemoteException {
+	//public void monitoraAcao(Acao acao) throws RemoteException {
 		
-	}
+	//}
 
 }
