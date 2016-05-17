@@ -1,5 +1,6 @@
 package MonitorAcoesModel;
 
+
 import java.util.ArrayList;
 
 public class Acao {
@@ -8,7 +9,6 @@ public class Acao {
 	
 	public Acao (String nomeAcao, double precoAcao) {
 		this.nomeAcao = nomeAcao;
-
 		this.precosAcao = new ArrayList<HistoricoPrecos>();
 		this.precosAcao.add(new HistoricoPrecos(precoAcao));
 	}
@@ -20,4 +20,10 @@ public class Acao {
 	public void setNomeAcao(String nomeAcao) {
 		this.nomeAcao = nomeAcao;
 	}
+
+	public ArrayList<HistoricoPrecos> getPrecosAcao() {
+		return precosAcao;
+	}
+	
+	
 }
