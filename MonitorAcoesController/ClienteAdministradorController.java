@@ -8,6 +8,10 @@ import MonitorAcoesView.ClienteAdministradorView;
 public class ClienteAdministradorController implements ActionListener {
 	private ClienteAdministradorView viewClienteAdministrador;
 	
+	public void inicializaClienteAdministrador() {
+		this.viewClienteAdministrador = new ClienteAdministradorView(this);
+	}
+	
 	public void alterarVisibilidadeTelas(boolean visibilidadeTelaPesquisa, boolean visibilidadeTelaEdicao) {
 		// troca tela visível
 		this.viewClienteAdministrador.getTelaPesquisa().setVisible(visibilidadeTelaPesquisa);

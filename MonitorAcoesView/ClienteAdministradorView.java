@@ -12,7 +12,7 @@ public class ClienteAdministradorView {
 		this.framePrincipalAdmin = new FrameAplicacao("Administrador de Preços de Ações", 600, 400);
 		
 		// telas com possível navegação no cliente administrador
-		this.telaPesquisa = new ClienteAdministradorPesquisa(600, 400, controlClienteAdministrador);
+		this.telaPesquisa = new ClienteAdministradorPesquisa(600, 360, controlClienteAdministrador);
 		this.telaEdicao = new ClienteAdministradorEdicao(600, 400, controlClienteAdministrador);
 		
 		// adiciona telas ao frame
