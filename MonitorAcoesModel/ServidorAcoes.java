@@ -22,6 +22,23 @@ public class ServidorAcoes extends UnicastRemoteObject implements IServidorAcoes
 	}
 	
 	public void setPrecoAcao(Acao acao, double novoPreco) throws RemoteException {
-		
+		String nomeAcao = acao.getNomeAcao();
+		int i = 0;
+		boolean achou = false;
+		for (Acao acaoInteracao : acoesServidor){
+			if (acaoInteracao.getNomeAcao().equals(nomeAcao)){
+				achou = true;
+				i = acoesServidor.indexOf(acaoInteracao);
+			}
+		}
+		if (!achou){
+			Acao novaAcao = new Acao(nomeAcao, novoPreco);
+			this.acoesServidor.add(novaAcao);
+			//InteresseAcao novoInteresse = new InteresseAcao(novaAcao); duvida aki
+		}else{
+			HistoricoPrecos preco = new HistoricoPrecos(novoPreco);
+			this.acoesServidor.get(i).getPrecosAcao().add(preco);
+			//comunicaAlteracao();
+		}
 	}
 }
