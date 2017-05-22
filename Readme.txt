@@ -1,4 +1,6 @@
-- Integrantes da dupla: Natércia Aguilar - 2013063185
+Teste Branch
+
+- Integrantes da dupla: NatÃ©rcia Aguilar - 2013063185
 			Robson Melo - 2008051212
 
 - Para compilar os seguintes comandos devem ser executados:
@@ -25,7 +27,7 @@ javac MonitorAcoesView/FrameAplicacao.java
 rmic MonitorAcoesModel.ClienteInvestidor
 rmic MonitorAcoesModel.ServidorAcoes
 
-- Para executar o código, primeiro deve-se iniciar o rmiregistry. Em seguida deve-se iniciar
+- Para executar o cÃ³digo, primeiro deve-se iniciar o rmiregistry. Em seguida deve-se iniciar
 o servidor e depois os clientes da seguinte forma:
 
 --Em uma janela de prompt de comando iniciamos o rmiregistry:
